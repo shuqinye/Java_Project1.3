@@ -9,6 +9,8 @@ import exceptions.ExceptionSets;
 /**
  * This class represents a specific car model and all its possible
  * properties (OptionSets)
+ * All the methods in the class is synchronized so that the CRUD (create, read,
+ * update, delete) options on the object are thread safe.
  * @author ShuqinYe
  * @andrewID shuqiny
  */
@@ -43,7 +45,7 @@ public class Automobile implements Serializable {
 	/**
 	 * @param opSet the OptionSet to be added
 	 */
-	public void addOpSet(OptionSet opSet) {
+	synchronized public void addOpSet(OptionSet opSet) {
 		opSets.add(opSet);
 	}
 	
@@ -52,7 +54,7 @@ public class Automobile implements Serializable {
 	 * Add an empty set to the auto.
 	 * @param setName the option set name.
 	 */
-	public void addEmptyOpSet(String setName) {
+	synchronized public void addEmptyOpSet(String setName) {
 		OptionSet opSet = new OptionSet(setName);
 		opSets.add(opSet);
 	}
@@ -64,7 +66,7 @@ public class Automobile implements Serializable {
 	 * @param opName the option name to be added.
 	 * @param price the price of the option.
 	 */
-	public void addOption(String setName, String opName, float price) {
+	synchronized public void addOption(String setName, String opName, float price) {
 		Option option = new Option(opName, price);
 		getOpSetByName(setName).addOp(opName, price);
 	}
@@ -74,26 +76,26 @@ public class Automobile implements Serializable {
 	 * Get the car model name.
 	 * @return car model as a String.
 	 */
-	public String getName() { return make + " " + model; }
+	synchronized public String getName() { return make + " " + model; }
 	
 	/**
 	 * Get the base price of the model.
 	 * @return the base price.
 	 */
-	public float getBasePrice() { return basePrice; }
+	synchronized public float getBasePrice() { return basePrice; }
 	
 	/**
 	 * Get the brand name
 	 * @return the brand name
 	 */
-	public String getMake() { return make; }
+	synchronized public String getMake() { return make; }
 	
 	
 	/**
 	 * Get the car model
 	 * @return the car model
 	 */
-	public String getModel() { return model; }
+	synchronized public String getModel() { return model; }
 	
 	
 	
@@ -102,7 +104,7 @@ public class Automobile implements Serializable {
 	 * Get the complete OptionSet of the car.
 	 * @return the OptionSet of the car.
 	 */
-	public ArrayList<OptionSet> getAllOptionSets() {
+	synchronized public ArrayList<OptionSet> getAllOptionSets() {
 		return opSets;
 	}
 	
@@ -111,7 +113,7 @@ public class Automobile implements Serializable {
 	 * @param setIndex the index of the OptionSet in the array of all OptionSets.
 	 * @return the OptionSet for the specified index.
 	 */
-	public OptionSet getOpSetByIndex(int setIndex) {
+	synchronized public OptionSet getOpSetByIndex(int setIndex) {
 		return opSets.get(setIndex);
 	}
 	
@@ -121,7 +123,7 @@ public class Automobile implements Serializable {
 	 * @param setName the option set name
 	 * @return the OptionSet of a certain name
 	 */
-	public OptionSet getOpSetByName(String setName) {
+	synchronized public OptionSet getOpSetByName(String setName) {
 		int i = 0;
 		while (i < opSets.size() && !opSets.get(i).getName().equals(setName)) ++i;
 		return opSets.get(i);
@@ -133,7 +135,7 @@ public class Automobile implements Serializable {
 	 * @param setName the name of option set to be found.
 	 * @return -1 if not found, index of the option set if found.
 	 */
-	public int findOpSetByName(String setName) {
+	synchronized public int findOpSetByName(String setName) {
 		int i = 0;
 		while (i < opSets.size() && !opSets.get(i).getName().equals(setName)) ++i;
 		return i < opSets.size() ? i : -1;
@@ -145,7 +147,7 @@ public class Automobile implements Serializable {
 	 * @param opName the option name
 	 * @return -1 if not found, index within its option set if found.
 	 */
-	public int findOpByName(String opName) {
+	synchronized public int findOpByName(String opName) {
 		int i = 0;
 		while (i < opSets.size() && opSets.get(i).findOpByName(opName) == -1) ++i;
 		return i < opSets.size() ? opSets.get(i).findOpByName(opName) : -1;
@@ -155,7 +157,7 @@ public class Automobile implements Serializable {
 	 * Set car base price.
 	 * @param basePrice the car base price.
 	 */
-	public void setBasePrice(float basePrice) {
+	synchronized public void setBasePrice(float basePrice) {
 		this.basePrice = basePrice;
 	}
 
@@ -163,14 +165,14 @@ public class Automobile implements Serializable {
 	 * Set the brand name
 	 * @param make brand name
 	 */
-	public void setMake(String make) { this.make = make; }
+	synchronized public void setMake(String make) { this.make = make; }
 	
 	
 	/**
 	 * Set the model
 	 * @param model the car model
 	 */
-	public void setModel(String model) { this.model = model; }
+	synchronized public void setModel(String model) { this.model = model; }
 	
 	
 	/**
@@ -178,7 +180,7 @@ public class Automobile implements Serializable {
 	 * @param opSet the new option set
 	 * @param opSetIndex the index of the option set that needs replacement
 	 */
-	public void setOpSet(int setIndex, OptionSet opSet) {
+	synchronized public void setOpSet(int setIndex, OptionSet opSet) {
 		opSets.add(setIndex, opSet);
 	}
 	
@@ -188,7 +190,7 @@ public class Automobile implements Serializable {
 	 * @param setIndex index of option set
 	 * @param opSetName name of option set.
 	 */
-	public void setOpSetName(int setIndex, String opSetName) {
+	synchronized public void setOpSetName(int setIndex, String opSetName) {
 		opSets.get(setIndex).setName(opSetName);
 	}
 	
@@ -197,7 +199,7 @@ public class Automobile implements Serializable {
 	 * @param name the name of the option set.
 	 * @param opIndex the index of the option in the option set.
 	 */
-	public void setOpBySetName(String setName, int opIndex, 
+	synchronized public void setOpBySetName(String setName, int opIndex, 
 			String opName, float opPrice) {
 		int i = 0;
 		while (i < opSets.size() && !opSets.get(i).getName().equals(setName)) ++i;
@@ -211,7 +213,7 @@ public class Automobile implements Serializable {
 	 * @param opIndex the option index in which the option is to be set
 	 * @param option the option
 	 */
-	public void setOpBySetIndex(int setIndex, int opIndex, 
+	synchronized public void setOpBySetIndex(int setIndex, int opIndex, 
 			String opName, float opPrice) {
 		opSets.get(setIndex).setOp(opIndex, opName, opPrice);
 	}
@@ -221,7 +223,7 @@ public class Automobile implements Serializable {
 	 * @param setName the set to be updated
 	 * @param opSet the new option set
 	 */
-	public void updateOpSet(String setName, OptionSet opSet) {
+	synchronized public void updateOpSet(String setName, OptionSet opSet) {
 		setOpSet(findOpSetByName(setName), opSet);
 	}
 	
@@ -230,7 +232,7 @@ public class Automobile implements Serializable {
 	 * @param setName the opSet name to be changed
 	 * @param newName the new opSet name
 	 */
-	public void updateOpSetName(String setName, String newName) {
+	synchronized public void updateOpSetName(String setName, String newName) {
 		int index = findOpSetByName(setName);
 		
 		try {
@@ -267,7 +269,7 @@ public class Automobile implements Serializable {
 	 * @param opName the option to be updated.
 	 * @param option the new option.
 	 */
-	public void updateOp(String setName, String opName, float opPrice) {
+	synchronized public void updateOp(String setName, String opName, float opPrice) {
 		int setIndex = findOpSetByName(setName);
 		
 		try {
@@ -305,7 +307,7 @@ public class Automobile implements Serializable {
 	 * @param opName the option name
 	 * @param opPrice the new price of the option
 	 */
-	public void updateOpPrice(String setName, String opName, float opPrice) {
+	synchronized public void updateOpPrice(String setName, String opName, float opPrice) {
 		int setIndex = findOpSetByName(setName);
 		
 		try {
@@ -341,7 +343,7 @@ public class Automobile implements Serializable {
 	 * Delete an option set at a certain index
 	 * @param setIndex index of the set to be deleted
 	 */
-	public void deleteOpSetByIndex(int setIndex) {
+	synchronized public void deleteOpSetByIndex(int setIndex) {
 		opSets.remove(setIndex);
 	}
 	
@@ -350,7 +352,7 @@ public class Automobile implements Serializable {
 	 * Delete an option set of a certain name
 	 * @param setName name of option set to be deleted
 	 */
-	public void deleteOpSetByName(String setName) {
+	synchronized public void deleteOpSetByName(String setName) {
 		opSets.remove(findOpSetByName(setName));
 	}
 	
@@ -359,7 +361,7 @@ public class Automobile implements Serializable {
 	 * @param setIndex index of option set
 	 * @param opIndex index of option to be deleted
 	 */
-	public void deleteOpByIndex(int setIndex, int opIndex) {
+	synchronized public void deleteOpByIndex(int setIndex, int opIndex) {
 		opSets.get(setIndex).deleteOpByIndex(opIndex);
 	}
 	
@@ -368,7 +370,7 @@ public class Automobile implements Serializable {
 	 * @param setName name of option set the option is in
 	 * @param opIndex index of option to be deleted
 	 */
-	public void deleteOpByIndex(String setName, int opIndex) {
+	synchronized public void deleteOpByIndex(String setName, int opIndex) {
 		opSets.get(findOpSetByName(setName)).deleteOpByIndex(opIndex);
 	}
 	
@@ -377,7 +379,7 @@ public class Automobile implements Serializable {
 	 * @param setIndex option set index.
 	 * @param opName name of option to be deleted
 	 */
-	public void deleteOpByName(int setIndex, String opName) {
+	synchronized public void deleteOpByName(int setIndex, String opName) {
 		opSets.get(setIndex).deleteOpByName(opName);
 	}
 	
@@ -386,7 +388,7 @@ public class Automobile implements Serializable {
 	 * @param setName name of option set the option is in
 	 * @param opName name of option to be deleted
 	 */
-	public void deleteOpByName(String setName, String opName) {
+	synchronized public void deleteOpByName(String setName, String opName) {
 		opSets.get(findOpSetByName(setName)).deleteOpByName(opName);
 	}
 	
@@ -395,7 +397,7 @@ public class Automobile implements Serializable {
 	 * Output all option sets and options within each option set.
 	 * @return a String representation of all option sets and options.
 	 */
-	public String getAuto() {
+	synchronized public String getAuto() {
 		StringBuffer str = new StringBuffer();
 		str.append("The car ");
 		str.append(make);
@@ -423,7 +425,7 @@ public class Automobile implements Serializable {
 	 * @param setName the option set name.
 	 * @return the name of the option chosen for the option set.
 	 */
-	public String getOpChoice(String setName) {
+	synchronized public String getOpChoice(String setName) {
 		return getOpSetByName(setName).getOpChoice().getName();
 	}
 	
@@ -432,7 +434,7 @@ public class Automobile implements Serializable {
 	 * @param setName the name of the option set.
 	 * @return the price of the option for the option set.
 	 */
-	public float getOpChoicePrice(String setName) {
+	synchronized public float getOpChoicePrice(String setName) {
 		return getOpSetByName(setName).getOpChoice().getPrice();
 	}
 	
@@ -441,7 +443,7 @@ public class Automobile implements Serializable {
 	 * @param setName the option set name.
 	 * @param opName the option name the user chooses.
 	 */
-	public void setOpChoice(String setName, String opName) {
+	synchronized public void setOpChoice(String setName, String opName) {
 		getOpSetByName(setName).setOpChoice(opName);
 	}
 
@@ -450,7 +452,7 @@ public class Automobile implements Serializable {
 	 * Get the total price of the car of user's choice
 	 * @return the total price of the car of a certain configuration.
 	 */
-	public float getTotalPrice() {
+	synchronized public float getTotalPrice() {
 		float totalPrice = 0;
 		totalPrice += basePrice;
 		for (int i = 0; i < opSets.size(); ++i)
@@ -462,7 +464,7 @@ public class Automobile implements Serializable {
 	/**
 	 * Print out the user configured car.
 	 */
-	public void printConfig() {
+	synchronized public void printConfig() {
 		System.out.println("Your car configuration is as follows:");
 		System.out.print("Car make: ");
 		System.out.println(make);

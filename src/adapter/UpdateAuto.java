@@ -8,10 +8,12 @@ package adapter;
  */
 public interface UpdateAuto {
 	
-	public void updateOptionSetName(String modelName, String setName, 
+	public void updateOptionSetName(String autoName, String setName, 
 			String newName);
 	
-	public void updateOptionPrice(String modelName, String setName, 
+	public void updateOptionPrice(String autoName, String setName, 
 			String opName, float newPrice);
+	
+
 
 }

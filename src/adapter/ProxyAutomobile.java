@@ -10,13 +10,34 @@ import model.Automobile;
 /**
  * This class hides the object Automobile but provides an API for user to access
  * API.
+ * 
  * @author ShuqinYe
  * @andrewID shuqiny
  *
  */
 public abstract class ProxyAutomobile {
 	
-	private static LinkedHashMap<String, Automobile> autos;
+	private static LinkedHashMap<String, Automobile> autos = new LinkedHashMap<String, Automobile>();
+	
+	
+	/**
+	 * Get the Automobile object with a specified Auto name.
+	 * 
+	 * @param name the Auto name = make + model
+	 * @return the Automobile with the specified name
+	 */
+	public Automobile getAuto(String name) {
+		Set<String> keySet = autos.keySet();
+		Iterator<String> i = keySet.iterator();
+		
+		while (i.hasNext()) {
+			String thisName = i.next();
+			if (name.equals(thisName)) return autos.get(name);
+		}
+		
+		return null;
+	}
+	
 	
 	/**
 	 * Build an Automobile object from a file.
@@ -26,7 +47,6 @@ public abstract class ProxyAutomobile {
 		FileIO fileio = new FileIO();
 		Automobile oneAuto = fileio.buildAutoObj(filename);
 		String name = oneAuto.getName();
-		autos = new LinkedHashMap<String, Automobile>();
 		autos.put(name, oneAuto);
 		
 	}
